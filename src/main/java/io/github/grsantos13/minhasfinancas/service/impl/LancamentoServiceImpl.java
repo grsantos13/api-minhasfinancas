@@ -3,6 +3,7 @@ package io.github.grsantos13.minhasfinancas.service.impl;
 import io.github.grsantos13.minhasfinancas.exception.RegraNegocioException;
 import io.github.grsantos13.minhasfinancas.model.entity.Lancamento;
 import io.github.grsantos13.minhasfinancas.model.enums.StatusLancamento;
+import io.github.grsantos13.minhasfinancas.model.enums.TipoLancamento;
 import io.github.grsantos13.minhasfinancas.model.repository.LancamentoRepository;
 import io.github.grsantos13.minhasfinancas.service.LancamentoService;
 import org.springframework.data.domain.Example;
@@ -90,5 +91,20 @@ public class LancamentoServiceImpl implements LancamentoService {
     @Override
     public Optional<Lancamento> getById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public BigDecimal obterSaldoPorUsuario(Long id) {
+        BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+        BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+
+        if (receitas == null) {
+            receitas = BigDecimal.ZERO;
+        }
+        if(despesas == null) {
+            despesas = BigDecimal.ZERO;
+        }
+
+        return receitas.subtract(despesas);
     }
 }

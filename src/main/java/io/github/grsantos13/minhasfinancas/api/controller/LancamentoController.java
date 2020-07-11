@@ -1,5 +1,6 @@
 package io.github.grsantos13.minhasfinancas.api.controller;
 
+import io.github.grsantos13.minhasfinancas.api.dto.AtualizaStatusDTO;
 import io.github.grsantos13.minhasfinancas.api.dto.LancamentoDTO;
 import io.github.grsantos13.minhasfinancas.exception.RegraNegocioException;
 import io.github.grsantos13.minhasfinancas.model.entity.Lancamento;
@@ -90,6 +91,26 @@ public class LancamentoController {
         return ResponseEntity.ok(lancamentoList);
     }
 
+    @PutMapping("/{id}/atualizar-status")
+    public ResponseEntity atualizarStatus(@PathVariable Long id, @RequestBody AtualizaStatusDTO status){
+        return service.getById(id)
+                .map(entity -> {
+                        StatusLancamento statusLancamento = StatusLancamento.valueOf(status.getStatus());
+                        if (statusLancamento == null) {
+                            return ResponseEntity.badRequest().body("Status não encontrado.");
+                        }
+
+                        entity.setStatus(statusLancamento);
+
+                        try {
+                            service.atualizar(entity);
+                            return ResponseEntity.ok(entity);
+                        }catch (RegraNegocioException e){
+                            return ResponseEntity.badRequest().body(e.getMessage());
+                        }
+                }).orElseGet(() -> new ResponseEntity("Lançamento não encontrado.", HttpStatus.BAD_REQUEST));
+    }
+
 
     private Lancamento converter(LancamentoDTO dto){
         Usuario usuario = usuarioService.getById(dto.getUsuario())
@@ -100,8 +121,12 @@ public class LancamentoController {
             lancamento.setAno(dto.getAno());
             lancamento.setMes(dto.getMes());
             lancamento.setUsuario(usuario);
-            lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
-            lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+            if (dto.getTipo() != null) {
+                lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+            }
+            if (dto.getStatus() != null) {
+                lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+            }
 
         return lancamento;
     }
