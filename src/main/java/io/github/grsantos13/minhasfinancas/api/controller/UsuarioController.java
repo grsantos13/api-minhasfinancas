@@ -59,7 +59,7 @@ public class UsuarioController {
         Optional<Usuario> usuario = service.getById(id);
 
         if (!usuario.isPresent()){
-            return ResponseEntity.badRequest().body("Usuário não encontrado");
+            return new ResponseEntity("Usuário não encontrado", HttpStatus.NOT_FOUND);
         }
 
         BigDecimal saldo = lancamentoService.obterSaldoPorUsuario(id);

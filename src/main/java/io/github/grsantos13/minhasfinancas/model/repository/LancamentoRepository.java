@@ -1,6 +1,7 @@
 package io.github.grsantos13.minhasfinancas.model.repository;
 
 import io.github.grsantos13.minhasfinancas.model.entity.Lancamento;
+import io.github.grsantos13.minhasfinancas.model.enums.StatusLancamento;
 import io.github.grsantos13.minhasfinancas.model.enums.TipoLancamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +15,9 @@ public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
 
     @Query(" select sum(l.valor) from Lancamento l " +
             " join l.usuario u " +
-            " where u.id = :idUsuario and l.tipo = :tipo " +
+            " where u.id = :idUsuario and l.tipo = :tipo and l.status = :status " +
             " group by u")
     BigDecimal obterSaldoPorTipoLancamentoEUsuario(@Param("idUsuario") Long id,
-                                                   @Param("tipo") TipoLancamento tipo);
+                                                   @Param("tipo") TipoLancamento tipo,
+                                                   @Param("status") StatusLancamento status);
 }
