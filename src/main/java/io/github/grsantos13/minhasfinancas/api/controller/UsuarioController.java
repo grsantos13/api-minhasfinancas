@@ -6,6 +6,7 @@ import io.github.grsantos13.minhasfinancas.exception.ErroDeAutenticacao;
 import io.github.grsantos13.minhasfinancas.exception.RegraNegocioException;
 import io.github.grsantos13.minhasfinancas.model.entity.Usuario;
 import io.github.grsantos13.minhasfinancas.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    private UsuarioService service;
-
-    public UsuarioController(UsuarioService service){
-        this.service = service;
-    }
+    private final UsuarioService service;
 
     @PostMapping
     public ResponseEntity cadastrarUsuario(@RequestBody UsuarioDTO usuario){
