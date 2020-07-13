@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "usuario", schema = "financas")
+@Table(name = "usuario")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
