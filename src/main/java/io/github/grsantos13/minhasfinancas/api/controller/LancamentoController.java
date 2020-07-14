@@ -120,6 +120,7 @@ public class LancamentoController {
             lancamento.setDescricao(dto.getDescricao());
             lancamento.setAno(dto.getAno());
             lancamento.setMes(dto.getMes());
+            lancamento.setValor(dto.getValor());
             lancamento.setUsuario(usuario);
             if (dto.getTipo() != null) {
                 lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
