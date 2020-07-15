@@ -91,6 +91,14 @@ public class LancamentoController {
         return ResponseEntity.ok(lancamentoList);
     }
 
+    @GetMapping('/{id}')
+    public ResponseEntity buscarPorId(@PathVariable Long id){
+        Lancamento lancamento = service.getById(id)
+            .orElseThrow(() -> new RegraNegocioException("Lançamento não encontrado."));
+        
+        return ResponseEntity.ok(lancamento);
+    }
+
     @PutMapping("/{id}/atualizar-status")
     public ResponseEntity atualizarStatus(@PathVariable Long id, @RequestBody AtualizaStatusDTO status){
         return service.getById(id)
