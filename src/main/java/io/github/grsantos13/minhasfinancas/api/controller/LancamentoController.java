@@ -73,6 +73,7 @@ public class LancamentoController {
     public ResponseEntity buscar(@RequestParam(value = "descricao", required = false) String descricao,
                                  @RequestParam(value = "mes", required = false) Integer mes,
                                  @RequestParam(value = "ano", required = false) Integer ano,
+                                 @RequestParam(value = "tipo", required = false) String tipo,
                                  @RequestParam("usuario") Long usuarioId){
 
         Optional<Usuario> usuario = usuarioService.getById(usuarioId);
@@ -85,13 +86,16 @@ public class LancamentoController {
             lancamentoFiltro.setMes(mes);
             lancamentoFiltro.setAno(ano);
             lancamentoFiltro.setUsuario(usuario.get());
+            if (tipo != null) {
+                lancamentoFiltro.setTipo(TipoLancamento.valueOf(tipo));
+            }
 
         List<Lancamento> lancamentoList = service.buscar(lancamentoFiltro);
 
         return ResponseEntity.ok(lancamentoList);
     }
 
-    @GetMapping('/{id}')
+    @GetMapping("/{id}")
     public ResponseEntity buscarPorId(@PathVariable Long id){
         Lancamento lancamento = service.getById(id)
             .orElseThrow(() -> new RegraNegocioException("Lançamento não encontrado."));
